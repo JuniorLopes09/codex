@@ -21,10 +21,11 @@ flags | description
 -A, --ascii | Use ASCII table instead of alphabet on Caesar Cipher
 -b, --bruteforce | Caesar bruteforce mode (Starts from 1 and increment the rotation until the specified rotation)
 -c, --cipher | Specifies the cipher method to decode
--k, --key | Specifies the key for Vigenère decoder
--l, --less | Return only the decoded text
 -f, --file | Read input from file
 -F, --force | Force the decoder to print non-printable characters
+-k, --key | Specifies the key for Vigenère decoder
+-l, --less | Return only the decoded text
+-L, --list | Show all available ciphers
 -n, --num, | Return the numeric value instead of ASCII
 -o, --output | Write the result in a file
 -q, --quiet | Do not print the result on screen
