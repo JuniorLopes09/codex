@@ -72,7 +72,7 @@ class MyParser(argparse.ArgumentParser):
 
 class Cipher:
 
-    def __init__(self, identifier: str, formated_name: str, decoder: callable, decoder_params: list = []):
+    def __init__(self, identifier: str, formated_name: str, decoder: callable, decoder_params: list = None):
         self.identifier = identifier
         self.decoder = decoder
         self.formated_name = formated_name
@@ -107,10 +107,14 @@ args = parser.parse_args()
 
 alphabet = [chr(i + 97) for i in range(26)]
 
+BASE62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+
+BASE91 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,./:;<=>?@[]^_`{|}~\""
+
 baconian_table = {'AAAAA': 'A', 'ABAAA': 'I', 'BAAAA': 'R', 'AAAAB': 'B', 'ABAAB': 'K', 'BAAAB': 'S', 'AAABA': 'C',
-            'ABABA': 'L', 'BAABA': 'T', 'AAABB': 'D', 'ABABB': 'M', 'BAABB': 'V', 'AABAA': 'E', 'ABBAA': 'N',
-            'BABAA': 'W', 'AABAB': 'F', 'ABBAB': 'O', 'BABAB': 'X', 'AABBA': 'G', 'ABBBA': 'P', 'BABBA': 'Y',
-            'AABBB': 'H', 'ABBBB': 'Q', 'BABBB': 'Z'}
+                  'ABABA': 'L', 'BAABA': 'T', 'AAABB': 'D', 'ABABB': 'M', 'BAABB': 'V', 'AABAA': 'E', 'ABBAA': 'N',
+                  'BABAA': 'W', 'AABAB': 'F', 'ABBAB': 'O', 'BABAB': 'X', 'AABBA': 'G', 'ABBBA': 'P', 'BABBA': 'Y',
+                  'AABBB': 'H', 'ABBBB': 'Q', 'BABBB': 'Z'}
 
 baconian26_table = {"AAAAA": "A", "AAAAB": "B", "AAABA": "C", "AAABB": "D", "AABAA": "E", "AABAB": "F", "AABBA": "G",
                     "AABBB": "H", "ABAAA": "I", "ABAAB": "J", "ABABA": "K", "ABABB": "L", "ABBAA": "M", "ABBAB": "N",
@@ -118,8 +122,8 @@ baconian26_table = {"AAAAA": "A", "AAAAB": "B", "AAABA": "C", "AAABB": "D", "AAB
                     "BABAB": "V", "BABBA": "W", "BABBB": "X", "BBAAA": "Y", "BBAAB": "Z"}
 
 atbash_table = {'A': 'Z', 'B': 'Y', 'C': 'X', 'D': 'W', 'E': 'V', 'F': 'U', 'G': 'T', 'H': 'S', 'I': 'R', 'J': 'Q',
-          'K': 'P', 'L': 'O', 'M': 'N', 'N': 'M', 'O': 'L', 'P': 'K', 'Q': 'J', 'R': 'I', 'S': 'H', 'T': 'G',
-          'U': 'F', 'V': 'E', 'W': 'D', 'X': 'C', 'Y': 'B', 'Z': 'A'}
+                'K': 'P', 'L': 'O', 'M': 'N', 'N': 'M', 'O': 'L', 'P': 'K', 'Q': 'J', 'R': 'I', 'S': 'H', 'T': 'G',
+                'U': 'F', 'V': 'E', 'W': 'D', 'X': 'C', 'Y': 'B', 'Z': 'A'}
 
 morse_table = {'.-': 'A', '-...': 'B', '-.-.': 'C', '-..': 'D', '.': 'E', '..-.': 'F', '--.': 'G', '....': 'H',
                '..': 'I', '.---': 'J', '-.-': 'K', '.-..': 'L', '--': 'M', '-.': 'N', '---': 'O', '.--.': 'P',
@@ -165,6 +169,7 @@ alt_code_table = {"☺": "1", "☻": "2", "♥": "3", "♦": "4", "♣": "5", "�
 
 punctuation = [' ', '!', "#", '&', '$', '@', '%', '(', ')', '[', ']', '{', '}', '=', '-', ':', ';', '>', '<', '?', '.',
                ',', '_', '"', "'", '\\', '/', '^', '~', '|']
+
 
 def style(text: str, is_found: bool, cipher: Cipher, less: bool = False, verbose: bool = False):
     if less and is_found:
@@ -220,14 +225,14 @@ def substitution_cipher(text: str, cipher_dict: dict, split: bool = False, min_d
 
 
 def dvorak_decode(text: str):
-    qwerty = r''' !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}'''
-    dvorak = r''' !_#$%&-()*}w[vz0123456789SsW]VZ@AXJE>UIDCHTNMBRL"POYGK<QF:/\=^{`axje.uidchtnmbrl'poygk,qf;?|+'''
+    qwerty_table = r''' !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}'''
+    dvorak_table = r''' !_#$%&-()*}w[vz0123456789SsW]VZ@AXJE>UIDCHTNMBRL"POYGK<QF:/\=^{`axje.uidchtnmbrl'poygk,qf;?|+'''
 
     string = ''
 
     for letter in text:
-        if letter not in punctuation or letter in dvorak:
-            string += qwerty[dvorak.index(letter)]
+        if letter not in punctuation or letter in dvorak_table:
+            string += qwerty_table[dvorak_table.index(letter)]
         else:
             string += letter
 
@@ -266,13 +271,13 @@ def base58_decode(text: str):
 
     _map = {char: index for index, char in enumerate(base58_alphabet)}
 
-    decimal = 0
+    decimal_number = 0
     _base = len(base58_alphabet)
 
     for char in text:
-        decimal = decimal * _base + _map[char]
+        decimal_number = decimal_number * _base + _map[char]
 
-    acc = decimal
+    acc = decimal_number
 
     result = []
     while acc > 0:
@@ -282,12 +287,51 @@ def base58_decode(text: str):
     return (b'\0' * (origlen - newlen) + bytes(reversed(result))).decode('UTF-8')
 
 
+def base62_decode(text: str):
+    decimal_number = 0
+    base62_str = text[::-1]
+    for i, c in enumerate(base62_str):
+        decimal_number += BASE62.index(c) * (62 ** i)
+    binary_number = bin(decimal_number)[2:]
+    padding = (len(binary_number) + 7) // 8 * 8 - len(binary_number)
+    binary_number = '0' * padding + binary_number
+    ascii_string = ''.join(chr(int(binary_number[i:i+8], 2)) for i in range(0, len(binary_number), 8))
+    return ascii_string
+
+
 def base64_decode(text: str):
     return b64.b64decode(text + "==").decode('UTF-8')
 
 
 def base85_decode(text: str):
     return b64.a85decode(text).decode('UTF-8')
+
+
+def base91_decode(text: str):
+    v = -1
+    b = 0
+    n = 0
+    out = bytearray()
+    for letter in text:
+        if letter not in BASE91:
+            continue
+        c = BASE91.index(letter)
+        if v < 0:
+            v = c
+        else:
+            v += c * 91
+            b |= v << n
+            n += 13 if (v & 8191) > 88 else 14
+            while True:
+                out.append(b & 255)
+                b >>= 8
+                n -= 8
+                if not n > 7:
+                    break
+            v = -1
+    if v + 1:
+        out.append((b | v << n) & 255)
+    return out.decode('UTF-8')
 
 
 def t9_decode(text: str):
@@ -387,8 +431,10 @@ decimal = Cipher("decimal", "Decimal", base_decode, [10, 3])
 hexadecimal = Cipher("hexadecimal", "Hexadecimal", base_decode, [16, 2])
 base32 = Cipher("base32", "Base32", base32_decode)
 base58 = Cipher("base58", "Base58", base58_decode)
+base62 = Cipher("base62", "Base62", base62_decode)
 base64 = Cipher("base64", "Base64", base64_decode)
 base85 = Cipher("base85", "Base85", base85_decode)
+base91 = Cipher("base91", "Base91", base91_decode)
 a1z26 = Cipher("a1z26", "A1Z26", substitution_cipher, [a1z26_table, True])
 morse = Cipher("morse", "Morse", morse_decode)
 goldbug = Cipher("goldbug", "GoldBug", substitution_cipher, [goldbug_table, False, 11])
@@ -406,8 +452,8 @@ nato = Cipher("nato", "Nato", substitution_cipher, [nato_table, True])
 dvorak = Cipher("dvorak", "Dvorak", dvorak_decode)
 altcode = Cipher("altcode", "Alt Code", substitution_cipher, [alt_code_table])
 
-ciphers = [caesar, vigenere, binary, octal, decimal, hexadecimal, base32, base58, base64, base85, a1z26, morse, goldbug,
-           baconian, baconian26, atbash, rot13, tomtom, multitap, t9, nato, dvorak, altcode, rot47]
+ciphers = [caesar, vigenere, binary, octal, decimal, hexadecimal, base32, base58, base62, base64, base85, base91, a1z26,
+           morse, goldbug, baconian, baconian26, atbash, rot13, tomtom, multitap, t9, nato, dvorak, altcode, rot47]
 # Exclude these ciphers from automated tentative
 all_exclude = ['caesar', 'vigenere', 'dvorak', 'rot47']
 
@@ -447,7 +493,7 @@ def main():
             try:
                 decoded = cipher.decode(args.cipher_text)
 
-            except (ValueError, IndexError, KeyError) as e:
+            except (ValueError, IndexError, KeyError):
                 found = False
 
             except Exception as e:
