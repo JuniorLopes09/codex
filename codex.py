@@ -166,11 +166,6 @@ alt_code_table = {"☺": "1", "☻": "2", "♥": "3", "♦": "4", "♣": "5", "�
 punctuation = [' ', '!', "#", '&', '$', '@', '%', '(', ')', '[', ']', '{', '}', '=', '-', ':', ';', '>', '<', '?', '.',
                ',', '_', '"', "'", '\\', '/', '^', '~', '|']
 
-if args.file:
-    with open(args.cipher_text, encoding='UTF-8') as f:
-        args.cipher_text = f.read()
-
-
 def style(text: str, is_found: bool, cipher: Cipher, less: bool = False, verbose: bool = False):
     if less and is_found:
         return f"{WHITE}{text}{ENDC}"
@@ -482,6 +477,9 @@ def main():
 
 
 if __name__ == "__main__":
+    if args.file:
+        with open(args.cipher_text, encoding='UTF-8') as f:
+            args.cipher_text = f.read().strip()
     if args.list:
         list_ciphers()
     elif args.cipher and args.cipher in caesar.identifier and args.bruteforce:
