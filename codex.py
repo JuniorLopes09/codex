@@ -107,8 +107,8 @@ args = parser.parse_args()
 
 alphabet = [chr(i + 97) for i in range(26)]
 
+BASE45 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
 BASE62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-
 BASE91 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,./:;<=>?@[]^_`{|}~\""
 
 baconian_table = {'AAAAA': 'A', 'ABAAA': 'I', 'BAAAA': 'R', 'AAAAB': 'B', 'ABAAB': 'K', 'BAAAB': 'S', 'AAABA': 'C',
@@ -255,6 +255,29 @@ def base_decode(text: str, base: int, stream_size: int):
 
 def base32_decode(text: str):
     return b64.b32decode(text).decode('UTF-8')
+
+
+def base45_decode(text: str):
+
+    buf = [BASE45.index(c) for c in text.rstrip("\n")]
+
+    buflen = len(buf)
+    if buflen % 3 == 1:
+        raise ValueError("Invalid base45 string")
+
+    res = []
+    for i in range(0, buflen, 3):
+        if buflen - i >= 3:
+            x = buf[i] + buf[i + 1] * 45 + buf[i + 2] * 45 * 45
+            if x > 0xFFFF:
+                raise ValueError
+            res.extend(divmod(x, 256))
+        else:
+            x = buf[i] + buf[i + 1] * 45
+            if x > 0xFF:
+                raise ValueError
+            res.append(x)
+    return bytes(res).decode('UTF-8')
 
 
 def base58_decode(text: str):
@@ -430,6 +453,7 @@ octal = Cipher("octal", "Octal", base_decode, [8, 3])
 decimal = Cipher("decimal", "Decimal", base_decode, [10, 3])
 hexadecimal = Cipher("hexadecimal", "Hexadecimal", base_decode, [16, 2])
 base32 = Cipher("base32", "Base32", base32_decode)
+base45 = Cipher("base45", "Base45", base45_decode)
 base58 = Cipher("base58", "Base58", base58_decode)
 base62 = Cipher("base62", "Base62", base62_decode)
 base64 = Cipher("base64", "Base64", base64_decode)
@@ -452,8 +476,9 @@ nato = Cipher("nato", "Nato", substitution_cipher, [nato_table, True])
 dvorak = Cipher("dvorak", "Dvorak", dvorak_decode)
 altcode = Cipher("altcode", "Alt Code", substitution_cipher, [alt_code_table])
 
-ciphers = [caesar, vigenere, binary, octal, decimal, hexadecimal, base32, base58, base62, base64, base85, base91, a1z26,
-           morse, goldbug, baconian, baconian26, atbash, rot13, tomtom, multitap, t9, nato, dvorak, altcode, rot47]
+ciphers = [caesar, atbash, binary, octal, decimal, hexadecimal, base32, base45, base58, base62, base64, base85, base91,
+           vigenere, a1z26, morse, goldbug, baconian, baconian26, rot13, tomtom, multitap, t9, nato, dvorak, altcode,
+           rot47]
 # Exclude these ciphers from automated tentative
 all_exclude = ['caesar', 'vigenere', 'dvorak', 'rot47']
 
