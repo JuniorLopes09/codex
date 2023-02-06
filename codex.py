@@ -111,6 +111,9 @@ BASE45 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
 BASE62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 BASE91 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&()*+,./:;<=>?@[]^_`{|}~\""
 
+ook_table = {"Ook. Ook.": "+", "Ook! Ook!": "-", "Ook. Ook?": ">", "Ook? Ook.": "<", "Ook! Ook?": "[",
+             "Ook? Ook!": "]", "Ook! Ook.": ".", "Ook. Ook!": ","}
+
 baconian_table = {'AAAAA': 'A', 'ABAAA': 'I', 'BAAAA': 'R', 'AAAAB': 'B', 'ABAAB': 'K', 'BAAAB': 'S', 'AAABA': 'C',
                   'ABABA': 'L', 'BAABA': 'T', 'AAABB': 'D', 'ABABB': 'M', 'BAABB': 'V', 'AABAA': 'E', 'ABBAA': 'N',
                   'BABAA': 'W', 'AABAB': 'F', 'ABBAB': 'O', 'BABAB': 'X', 'AABBA': 'G', 'ABBBA': 'P', 'BABBA': 'Y',
@@ -443,6 +446,57 @@ def rot47_decode(text: str):
     return ''.join(decode)
 
 
+def brainfuck_decode(code: str):
+    code = ''.join(filter(lambda x: x in ['.', ',', '[', ']', '<', '>', '+', '-'], code))
+
+    temp_bracestack, bracemap = [], {}
+
+    for position, command in enumerate(code):
+        if command == "[":
+            temp_bracestack.append(position)
+        if command == "]":
+            start = temp_bracestack.pop()
+            bracemap[start] = position
+            bracemap[position] = start
+
+    cells, codeptr, cellptr, output = [0], 0, 0, ''
+
+    while codeptr < len(code):
+        command = code[codeptr]
+
+        if command == ">":
+            cellptr += 1
+            if cellptr == len(cells):
+                cells.append(0)
+
+        if command == "<":
+            cellptr = 0 if cellptr <= 0 else cellptr - 1
+
+        if command == "+":
+            cells[cellptr] = cells[cellptr] + 1 if cells[cellptr] < 255 else 0
+
+        if command == "-":
+            cells[cellptr] = cells[cellptr] - 1 if cells[cellptr] > 0 else 255
+
+        if command == "[" and cells[cellptr] == 0:
+            codeptr = bracemap[codeptr]
+        if command == "]" and cells[cellptr] != 0:
+            codeptr = bracemap[codeptr]
+        if command == ".":
+            output += chr(cells[cellptr])
+        if command == ",":
+            cells[cellptr] = ord(input("Enter input character: "))
+
+        codeptr += 1
+    return output
+
+
+def ook_decode(code: str):
+    for key, value in ook_table.items():
+        code = code.replace(key, value)
+    return brainfuck_decode(code)
+
+
 def remove_color(text: str):
     return text.replace(GREEN, '').replace(WHITE, '').replace(RED, '').replace(BLUE, '').replace(BOLD, '')
 
@@ -475,12 +529,13 @@ tomtom = Cipher("tomtom", "Tom Tom", substitution_cipher, [tomtom_table, True])
 nato = Cipher("nato", "Nato", substitution_cipher, [nato_table, True])
 dvorak = Cipher("dvorak", "Dvorak", dvorak_decode)
 altcode = Cipher("altcode", "Alt Code", substitution_cipher, [alt_code_table])
-
+brainfuck = Cipher("brainfuck", "Brainfuck", brainfuck_decode)
+ook = Cipher("ook!", "Ook!", ook_decode)
 ciphers = [caesar, atbash, binary, octal, decimal, hexadecimal, base32, base45, base58, base62, base64, base85, base91,
            vigenere, a1z26, morse, goldbug, baconian, baconian26, rot13, tomtom, multitap, t9, nato, dvorak, altcode,
-           rot47]
+           rot47, brainfuck, ook]
 # Exclude these ciphers from automated tentative
-all_exclude = ['caesar', 'vigenere', 'dvorak', 'rot47']
+all_exclude = ['caesar', 'vigenere', 'dvorak', 'rot47', 'brainfuck', 'ook!']
 
 
 def list_ciphers():
