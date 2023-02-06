@@ -121,24 +121,24 @@ atbash_table = {'A': 'Z', 'B': 'Y', 'C': 'X', 'D': 'W', 'E': 'V', 'F': 'U', 'G':
           'K': 'P', 'L': 'O', 'M': 'N', 'N': 'M', 'O': 'L', 'P': 'K', 'Q': 'J', 'R': 'I', 'S': 'H', 'T': 'G',
           'U': 'F', 'V': 'E', 'W': 'D', 'X': 'C', 'Y': 'B', 'Z': 'A'}
 
-morse_table = {'.-': 'A', '-...': 'B', '-.-.': 'C', '-..': 'D', '.': 'E', '..-.': 'F', '--.': 'G', '....': 'H', '..': 'I',
-         '.---': 'J', '-.-': 'K', '.-..': 'L', '--': 'M', '-.': 'N', '---': 'O', '.--.': 'P', '--.-': 'Q', '.-.': 'R',
-         '...': 'S', '-': 'T', '..-': 'U', '...-': 'V', '.--': 'W', '-..-': 'X', '-.--': 'Y', '--..': 'Z', '.----': '1',
-         '..---': '2', '...--': '3', '....-': '4', '.....': '5', '-....': '6', '--...': '7', '---..': '8', '----.': '9',
-         '-----': '0', '--..--': ', ', '.-.-.-': '.', '..--..': '?', '-..-.': '/', '-....-': '-', '-.--.': '(',
-         '-.--.-': ')', '/': ' '}
+morse_table = {'.-': 'A', '-...': 'B', '-.-.': 'C', '-..': 'D', '.': 'E', '..-.': 'F', '--.': 'G', '....': 'H',
+               '..': 'I', '.---': 'J', '-.-': 'K', '.-..': 'L', '--': 'M', '-.': 'N', '---': 'O', '.--.': 'P',
+               '--.-': 'Q', '.-.': 'R', '...': 'S', '-': 'T', '..-': 'U', '...-': 'V', '.--': 'W', '-..-': 'X',
+               '-.--': 'Y', '--..': 'Z', '.----': '1', '..---': '2', '...--': '3', '....-': '4', '.....': '5',
+               '-....': '6', '--...': '7', '---..': '8', '----.': '9', '-----': '0', '--..--': ', ', '.-.-.-': '.',
+               '..--..': '?', '-..-.': '/', '-....-': '-', '-.--.': '(', '-.--.-': ')', '/': ' '}
 
-goldbug_table = {'5': 'A', '2': 'B', '-': 'C', '†': 'D', '8': 'E', '1': 'F', '3': 'G', '4': 'H',
-           '6': 'I', ',': 'J', '7': 'K', '0': 'L', '9': 'M', '*': 'N', '‡': 'O', '.': 'P',
-           '$': 'Q', '(': 'R', ')': 'S', ';': 'T', '?': 'U', '¶': 'V', ']': 'W', '¢': 'X', ':': 'Y', '[': 'Z'}
+goldbug_table = {'5': 'A', '2': 'B', '-': 'C', '†': 'D', '8': 'E', '1': 'F', '3': 'G', '4': 'H',  '6': 'I',  ',': 'J',
+                 '7': 'K', '0': 'L', '9': 'M', '*': 'N', '‡': 'O', '.': 'P', '$': 'Q', '(': 'R', ')': 'S', ';': 'T',
+                 '?': 'U', '¶': 'V', ']': 'W', '¢': 'X', ':': 'Y', '[': 'Z'}
 
-a1z26_table = {'1': 'A', '2': 'B', '3': 'C', '4': 'D', '5': 'E', '6': 'F', '7': 'G', '8': 'H', '9': 'I', '10': 'J', '11': 'K',
-         '12': 'L', '13': 'M', '14': 'N', '15': 'O', '16': 'P', '17': 'Q', '18': 'R', '19': 'S', '20': 'T', '21': 'U',
-         '22': 'V', '23': 'W', '24': 'X', '25': 'Y', '26': 'Z'}
+a1z26_table = {'1': 'A', '2': 'B', '3': 'C', '4': 'D', '5': 'E', '6': 'F', '7': 'G', '8': 'H', '9': 'I', '10': 'J',
+               '11': 'K', '12': 'L', '13': 'M', '14': 'N', '15': 'O', '16': 'P', '17': 'Q', '18': 'R', '19': 'S',
+               '20': 'T', '21': 'U', '22': 'V', '23': 'W', '24': 'X', '25': 'Y', '26': 'Z'}
 
-rot13_table = {'N': 'A', 'O': 'B', 'P': 'C', 'Q': 'D', 'R': 'E', 'S': 'F', 'T': 'G', 'U': 'H', 'V': 'I', 'W': 'J', 'X': 'K',
-         'Y': 'L', 'Z': 'M', 'A': 'N', 'B': 'O', 'C': 'P', 'D': 'Q', 'E': 'R', 'F': 'S', 'G': 'T', 'H': 'U', 'I': 'V',
-         'J': 'W', 'K': 'X', 'L': 'Y', 'M': 'Z'}
+rot13_table = {'N': 'A', 'O': 'B', 'P': 'C', 'Q': 'D', 'R': 'E', 'S': 'F', 'T': 'G', 'U': 'H', 'V': 'I', 'W': 'J',
+               'X': 'K', 'Y': 'L', 'Z': 'M', 'A': 'N', 'B': 'O', 'C': 'P', 'D': 'Q', 'E': 'R', 'F': 'S', 'G': 'T',
+               'H': 'U', 'I': 'V', 'J': 'W', 'K': 'X', 'L': 'Y', 'M': 'Z'}
 
 t9_table = {'0': ' ', '21': 'A', '22': 'B', '23': 'C', '31': 'D', '32': 'E', '33': 'F', '41': 'G', '42': 'H', '43': 'I',
             '51': 'J', '52': 'K', '53': 'L', '61': 'M', '62': 'N', '63': 'O', '71': 'P', '72': 'Q', '73': 'R',
@@ -166,38 +166,21 @@ alt_code_table = {"☺": "1", "☻": "2", "♥": "3", "♦": "4", "♣": "5", "�
 punctuation = [' ', '!', "#", '&', '$', '@', '%', '(', ')', '[', ']', '{', '}', '=', '-', ':', ';', '>', '<', '?', '.',
                ',', '_', '"', "'", '\\', '/', '^', '~', '|']
 
-vigenere_keys = args.key
-
-if args.wordlist:
-    with open(args.wordlist, 'r') as wordlist:
-        lenght = 0
-        for i in args.cipher_text:
-            if i.lower() in alphabet:
-                lenght += 1
-        for line in wordlist.readlines():
-            if len(line) > lenght:
-                vigenere_keys += line[:lenght] + '\n'
-            else:
-                vigenere_keys += line
-        vigenere_keys = vigenere_keys[:-1]
-
-
 if args.file:
     with open(args.cipher_text, encoding='UTF-8') as f:
         args.cipher_text = f.read()
 
 
-def style(text: str, is_found: bool, cipher_method: str, less: bool = False, verbose: bool = False):
+def style(text: str, is_found: bool, cipher: Cipher, less: bool = False, verbose: bool = False):
     if less and is_found:
         return f"{WHITE}{text}{ENDC}"
-    elif verbose:
-        if is_found:
-            return f"{GREEN}[{WHITE}+{GREEN}]{WHITE} {cipher_method}: {text} {ENDC}"
-        else:
-            return f"{RED}[{WHITE}-{RED}]{WHITE} {cipher_method}: {text} {ENDC}"
     elif is_found:
-        return f"{GREEN}[{WHITE}+{GREEN}]{WHITE} {cipher_method}: {text} {ENDC}"
-    elif text:
+        if cipher in [caesar, vigenere] and args.wordlist or args.bruteforce:
+            return f"{BLUE}[{WHITE}{cipher.formated_name}{BLUE}]{WHITE}: {text} {ENDC}"
+        return f"{GREEN}[{WHITE}+{GREEN}]{WHITE} {cipher.formated_name}: {text} {ENDC}"
+    elif verbose:
+        return f"{RED}[{WHITE}-{RED}]{WHITE} {cipher.formated_name}: {text} {ENDC}"
+    else:
         return text
 
 
@@ -242,8 +225,8 @@ def substitution_cipher(text: str, cipher_dict: dict, split: bool = False, min_d
 
 
 def dvorak_decode(text: str):
-    qwerty = ''' !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}'''
-    dvorak = ''' !_#$%&-()*}w[vz0123456789SsW]VZ@AXJE>UIDCHTNMBRL"POYGK<QF:/\=^{`axje.uidchtnmbrl'poygk,qf;?|+'''
+    qwerty = r''' !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}'''
+    dvorak = r''' !_#$%&-()*}w[vz0123456789SsW]VZ@AXJE>UIDCHTNMBRL"POYGK<QF:/\=^{`axje.uidchtnmbrl'poygk,qf;?|+'''
 
     string = ''
 
@@ -305,7 +288,7 @@ def base58_decode(text: str):
 
 
 def base64_decode(text: str):
-    return b64.b64decode(text).decode('UTF-8')
+    return b64.b64decode(text + "==").decode('UTF-8')
 
 
 def base85_decode(text: str):
@@ -354,71 +337,37 @@ def multitap_decode(text: str, sep: str = " "):
     return multitap_decoded
 
 
-def caesar_decode(text: str, rot: int, bruteforce: bool = False, ascii_mode: bool = False):
+def caesar_decode(text: str, rot: int, ascii_mode: bool = False):
     decoded_caesar = ''
-    bottom = False
-    if bruteforce:
-        decoded_caesar += '\n'
-        step = -1 if rot < 0 else 1
-        for rotation in range(step, rot + step, step):
-            if bottom:
-                decoded_caesar = decoded_caesar[:-1 * (4 + len(str(rotation)))]
-                decoded_caesar += f'\n{RED}[{BOLD}Ascii Bottom{RED}]{ENDC}'
+    if ascii_mode:
+        for i in range(len(text)):
+            if int(ord(text[i]) - rot) < 0:
+                decoded_caesar += 'Impossible to print all characteres'
                 break
-            if not args.less:
-                decoded_caesar += f'\n {BLUE}[{ENDC}{BOLD}ROT {rotation}{BLUE}]{ENDC} '
-            if ascii_mode:
-                for i in range(len(text)):
-                    if int(ord(text[i]) - rotation) < 0:
-                        bottom = True
-                        break
-                    decoded_caesar += chr(int(ord(text[i])) - rotation)
-            else:
-                for n in range(len(text)):
-                    if text[n].lower() in alphabet:
-                        decoded_caesar += to_char(to_num(text[n]) - rotation).upper() if text[n].isupper() else \
-                            to_char(to_num(text[n]) - rotation)
-                    else:
-                        decoded_caesar += text[n]
-            decoded_caesar += '\n'
-        return decoded_caesar
+            decoded_caesar += chr(int(ord(text[i])) - rot)
     else:
-        if ascii_mode:
-            for i in range(len(text)):
-                if int(ord(text[i]) - rot) < 0:
-                    decoded_caesar += 'Impossible to print all characteres'
-                    break
-                decoded_caesar += chr(int(ord(text[i])) - rot)
-        else:
-            for i in range(len(text)):
-                if text[i].lower() in alphabet:
-                    decoded_caesar += to_char(to_num(text[i]) - rot).upper() if text[i].isupper() \
-                        else to_char(to_num(text[i]) - rot)
-                else:
-                    decoded_caesar += text[i]
-        return decoded_caesar
-
-
-def vigenere_decode(text: str, keys: str):
-    final_out = '\n'
-    keys = keys.split('\n')
-    for key in keys:
-        decoded_viginere = ''
-        count = 0
-        n_key = [to_num(i) for i in key]
-        limit = len(key)
         for i in range(len(text)):
             if text[i].lower() in alphabet:
-                new_char = to_char(to_num(text[i]) - n_key[count % limit])
-                decoded_viginere += new_char.upper() if text[i].isupper() else new_char.lower()
-                count += 1
+                decoded_caesar += to_char(to_num(text[i]) - rot).upper() if text[i].isupper() \
+                    else to_char(to_num(text[i]) - rot)
             else:
-                decoded_viginere += text[i]
-        if args.wordlist:
-            final_out += f'{BLUE}\n[{ENDC}{key}{BLUE}]{ENDC} {decoded_viginere}\n'
+                decoded_caesar += text[i]
+
+    return decoded_caesar
+
+
+def vigenere_decode(text: str, key: str):
+    decoded_viginere = ''
+    n_key = [to_num(i) for i in key]
+    limit = len(key)
+    for i, char in enumerate(text):
+        if char.lower() in alphabet:
+            new_char = to_char(to_num(char) - n_key[i % limit])
+            decoded_viginere += new_char.upper() if char.isupper() else new_char.lower()
         else:
-            return decoded_viginere
-    return final_out
+            decoded_viginere += char
+
+    return decoded_viginere
 
 
 def rot47_decode(text: str):
@@ -453,8 +402,8 @@ baconian26 = Cipher("baconian26", "Baconian26", substitution_cipher, [baconian26
 atbash = Cipher("atbash", "AtBash", substitution_cipher, [atbash_table, False, 9])
 rot13 = Cipher("rot13", "ROT13", substitution_cipher, [rot13_table, False, 9])
 rot47 = Cipher("rot47", "ROT47", rot47_decode)
-caesar = Cipher("caesar", "Caesar", caesar_decode, [args.rotation, args.bruteforce, args.ascii])
-vigenere = Cipher("vigenere", "Vigenère", vigenere_decode, [vigenere_keys])
+caesar = Cipher("caesar", f"Caesar +{args.rotation}", caesar_decode, [args.rotation, args.ascii])
+vigenere = Cipher("vigenere", f"Vigenère ({args.key})", vigenere_decode, [args.key])
 multitap = Cipher("multitap", "MultiTap", multitap_decode)
 t9 = Cipher("t9", "T9", t9_decode)
 tomtom = Cipher("tomtom", "Tom Tom", substitution_cipher, [tomtom_table, True])
@@ -468,12 +417,29 @@ ciphers = [caesar, vigenere, binary, octal, decimal, hexadecimal, base32, base58
 all_exclude = ['caesar', 'vigenere', 'dvorak', 'rot47']
 
 
-def main():
+def list_ciphers():
+    for cipher in ciphers:
+        print(cipher.formated_name)
 
-    if args.list:
-        for cipher in ciphers:
-            print(cipher.formated_name)
-        return
+
+def caesar_bruteforce():
+    for rot in range(1, 26):
+        caesar.decoder_params = [rot, args.ascii]
+        caesar.formated_name = f"Rotation {rot}"
+        main()
+
+
+def vigenere_wordlist():
+    with open(args.wordlist, 'r') as wordlist:
+        keys = [key.strip() for key in wordlist.readlines()]
+
+    for key in keys:
+        vigenere.decoder_params = [key]
+        vigenere.formated_name = key
+        main()
+
+
+def main():
 
     file_out = ''
     unknown_cipher = True
@@ -492,14 +458,19 @@ def main():
             except Exception as e:
                 print(e)
 
-            if decoded.strip() and decoded.isprintable():
-                out = style(decoded, found, cipher.formated_name, less=args.less, verbose=args.verbose)
+            decoded = decoded.replace("\n", "§§\\n§§").replace("\t", "§§\\t§§")
+            if decoded.strip() and (decoded.isprintable() or args.force):
+                decoded = decoded.replace("§§\\n§§", "\n").replace("§§\\t§§", "\t")
+                out = style(decoded, found, cipher, less=args.less, verbose=args.verbose)
 
             if out:
                 if not args.quiet:
                     print(out)
                 if args.output:
                     file_out += out
+
+            if args.cipher:
+                break
 
     if unknown_cipher:
         error_msg = "Unknown Cipher"
@@ -511,4 +482,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if args.list:
+        list_ciphers()
+    elif args.cipher and args.cipher in caesar.identifier and args.bruteforce:
+        caesar_bruteforce()
+    elif args.cipher and args.cipher in vigenere.identifier and args.wordlist:
+        vigenere_wordlist()
+    else:
+        main()
