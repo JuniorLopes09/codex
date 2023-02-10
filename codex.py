@@ -4,6 +4,7 @@
 
 import argparse
 import base64 as b64
+import sys
 
 BLUE = '\033[94m'
 GREEN = '\033[32m'
@@ -87,7 +88,7 @@ class Cipher:
 
 parser = MyParser(usage='codex.py cipher_text [OPTIONS]')
 group = parser.add_mutually_exclusive_group()
-parser.add_argument("cipher_text", help="The ciphered text or file to be decoded", type=str)
+parser.add_argument("cipher_text", help="The ciphered text or file to be decoded", nargs='?', type=str)
 parser.add_argument("-v", "--verbose", action='store_true')
 parser.add_argument("-s", "--separator", help='Specifies the separator', default=' ', type=str)
 parser.add_argument("-n", "--num", help="Show the numeric value instead of ASCII", action='store_true')
@@ -103,6 +104,7 @@ parser.add_argument("-r", "--rotation", help='Specifies Caesar Cipher rotation',
 parser.add_argument('-A', '--ascii', help='Use ascii table instead of alphabet on Caesar Cipher', action='store_true')
 parser.add_argument('-w', '--wordlist', help='Read a wordlist as key for vigenere')
 parser.add_argument('-k', '--key', help='Specifies a key for vigenere', default='', type=str)
+parser.add_argument('stdin', nargs='?', type=argparse.FileType('r'), default=sys.stdin)
 args = parser.parse_args()
 
 alphabet = [chr(i + 97) for i in range(26)]
@@ -565,7 +567,8 @@ def main():
     file_out = ''
     unknown_cipher = True
     for cipher in ciphers:
-        if (not args.cipher and cipher.identifier not in all_exclude) or (args.cipher and args.cipher in cipher.identifier):
+        if (not args.cipher and cipher.identifier not in all_exclude) or \
+                (args.cipher and args.cipher in cipher.identifier):
             unknown_cipher = False
             decoded = ''
             out = ''
@@ -603,9 +606,17 @@ def main():
 
 
 if __name__ == "__main__":
+    if not sys.stdin.isatty():
+        args.cipher_text = args.stdin.read()
+
     if args.file:
         with open(args.cipher_text, encoding='UTF-8') as f:
             args.cipher_text = f.read().strip()
+
+    if not args.cipher_text:
+        parser.print_usage()
+        parser.exit(1)
+
     if args.list:
         list_ciphers()
     elif args.cipher and args.cipher in caesar.identifier and args.bruteforce:
