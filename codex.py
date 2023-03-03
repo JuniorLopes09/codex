@@ -427,10 +427,12 @@ def vigenere_decode(text: str, key: str):
     decoded_viginere = ''
     n_key = [to_num(i) for i in key]
     limit = len(key)
-    for i, char in enumerate(text):
+    index = 0
+    for char in text:
         if char.lower() in alphabet:
-            new_char = to_char(to_num(char) - n_key[i % limit])
+            new_char = to_char(to_num(char) - n_key[index % limit])
             decoded_viginere += new_char.upper() if char.isupper() else new_char.lower()
+            index += 1
         else:
             decoded_viginere += char
 
