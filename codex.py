@@ -222,7 +222,7 @@ def substitution_cipher(text: str, cipher_dict: dict, split: bool = False, min_d
         text = text.split(args.separator)
 
     for letter in text:
-        if letter not in punctuation or letter in cipher_dict:
+        if (letter not in punctuation and letter not in "0123456789") or letter in cipher_dict:
             sub_decoded += cipher_dict[(letter.upper())] if letter.isupper() else cipher_dict[letter.upper()].lower()
             string += letter
         else:
@@ -572,10 +572,12 @@ def is_printable(text: str):
 def decode_text(cipher_text: str, cipher: Cipher):
     decoded = ''
     found = True
+    if cipher.formated_name == 'ROT13':
+        pass
     try:
         decoded = cipher.decode(cipher_text)
 
-    except (ValueError, IndexError, KeyError):
+    except (ValueError, IndexError, KeyError) as e:
         found = False
 
     except Exception as e:
@@ -595,7 +597,7 @@ def main(cipher_text: str):
         if not cipher_decoder:
             error_msg = "Unknown Cipher"
             print(style(error_msg, False, args.cipher, verbose=True))
-        decoders.extend(cipher_decoder)
+        decoders.append(cipher_decoder)
     else:
         decoders.extend([cipher for cipher in ciphers if cipher.identifier not in all_exclude])
 
