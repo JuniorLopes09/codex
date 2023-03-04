@@ -34,29 +34,35 @@ flags | description
 -v, --verbose | Return even the failed tries
 
 #### Ciphers 
-* Binary
-* Octal
-* Decimal
-* Hexadecimal
-* Base 32
-* Base 58
-* Base 64
-* Base 85
-* Morse 
-* AtBash
 * A1Z26
-* ROT 13
-* ROT 47
-* T9
-* MultiTap
-* TomTom
-* Nato
-* Dvorak
 * Alt Code
+* AtBash     
 * Baconian
-* Baconian 26
-* Gold Bug
-* Caesar cipher
+* Baconian26
+* Base32     
+* Base45
+* Base58
+* Base62
+* Base64
+* Base85
+* Base91
+* Binary     
+* Brainfuck
+* Caesar Cipher
+* Decimal    
+* Dvorak
+* GoldBug
+* Hexadecimal
+* Morse
+* MultiTap
+* Nato
+* Octal      
+* Ook!
+* ROT13
+* ROT47
+* ROT8000
+* T9
+* Tom Tom
 * Vigenère
 
 

@@ -450,6 +450,16 @@ def rot47_decode(text: str):
     return ''.join(decode)
 
 
+def rot8000_decode(text: str):
+    decoded_rot8000 = ''
+    for char in text:
+        if char == ' ':
+            decoded_rot8000 += ' '
+            continue
+        decoded_rot8000 += chr(ord(char) - 31753)
+    return decoded_rot8000
+
+
 def brainfuck_decode(code: str):
     code = ''.join(filter(lambda x: x in ['.', ',', '[', ']', '<', '>', '+', '-'], code))
 
@@ -525,6 +535,7 @@ baconian26 = Cipher("baconian26", "Baconian26", substitution_cipher, [baconian26
 atbash = Cipher("atbash", "AtBash", substitution_cipher, [atbash_table, False, 9])
 rot13 = Cipher("rot13", "ROT13", substitution_cipher, [rot13_table, False, 9])
 rot47 = Cipher("rot47", "ROT47", rot47_decode)
+rot8000 = Cipher("rot8000", "ROT8000", rot8000_decode)
 caesar = Cipher("caesar", f"Caesar +{args.rotation}", caesar_decode, [args.rotation, args.ascii])
 vigenere = Cipher("vigenere", f"Vigenère ({args.key})", vigenere_decode, [args.key])
 multitap = Cipher("multitap", "MultiTap", multitap_decode)
@@ -537,7 +548,7 @@ brainfuck = Cipher("brainfuck", "Brainfuck", brainfuck_decode)
 ook = Cipher("ook!", "Ook!", ook_decode)
 ciphers = [caesar, atbash, binary, octal, decimal, hexadecimal, base32, base45, base58, base62, base64, base85, base91,
            vigenere, a1z26, morse, goldbug, baconian, baconian26, rot13, tomtom, multitap, t9, nato, dvorak, altcode,
-           rot47, brainfuck, ook]
+           rot47, brainfuck, ook, rot8000]
 # Exclude these ciphers from automated tentative
 all_exclude = ['caesar', 'vigenere', 'dvorak', 'rot47', 'brainfuck', 'ook!']
 
