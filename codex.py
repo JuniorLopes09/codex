@@ -46,6 +46,8 @@ class MyParser(argparse.ArgumentParser):
       -q, --quiet           	    Do not display the result on screen
 
       -r, --rotation ROTATION       Specifies Caesar Cipher rotation
+      
+      -R, --recursive               Recursive decoding
 
       -s, --separator SEPARATOR 	Specifies the separator
 
@@ -101,6 +103,7 @@ group.add_argument("-q", "--quiet", help="Do not display the result on screen", 
 parser.add_argument("-c", "--cipher", help="Specifies The cipher method to decode", type=str)
 parser.add_argument("-b", "--bruteforce", help='Caesar bruteforce method', action='store_true')
 parser.add_argument("-r", "--rotation", help='Specifies Caesar Cipher rotation', type=int, default=25)
+parser.add_argument("-R", "--recursive", help='Recursive decoding ', action='store_true')
 parser.add_argument('-A', '--ascii', help='Use ascii table instead of alphabet on Caesar Cipher', action='store_true')
 parser.add_argument('-w', '--wordlist', help='Read a wordlist as key for vigenere')
 parser.add_argument('-k', '--key', help='Specifies a key for vigenere', default='', type=str)
@@ -149,13 +152,14 @@ rot13_table = {'N': 'A', 'O': 'B', 'P': 'C', 'Q': 'D', 'R': 'E', 'S': 'F', 'T': 
                'X': 'K', 'Y': 'L', 'Z': 'M', 'A': 'N', 'B': 'O', 'C': 'P', 'D': 'Q', 'E': 'R', 'F': 'S', 'G': 'T',
                'H': 'U', 'I': 'V', 'J': 'W', 'K': 'X', 'L': 'Y', 'M': 'Z'}
 
-t9_table = {'0': ' ', '21': 'A', '22': 'B', '23': 'C', '31': 'D', '32': 'E', '33': 'F', '41': 'G', '42': 'H', '43': 'I',
-            '51': 'J', '52': 'K', '53': 'L', '61': 'M', '62': 'N', '63': 'O', '71': 'P', '72': 'Q', '73': 'R',
-            '74': 'S', '81': 'T', '82': 'U', '83': 'V', '91': 'W', '92': 'X', '93': 'Y', '94': 'Z'}
+short_multitap_table = {'21': 'A', '22': 'B', '23': 'C', '31': 'D', '32': 'E', '33': 'F', '41': 'G', '42': 'H',
+                        '43': 'I', '51': 'J', '52': 'K', '53': 'L', '61': 'M', '62': 'N', '63': 'O', '71': 'P',
+                        '72': 'Q', '73': 'R', '74': 'S', '81': 'T', '82': 'U', '83': 'V', '91': 'W', '92': 'X',
+                        '93': 'Y', '94': 'Z'}
 
 multitap_table = {'222': 'C', '22': 'B', '2': 'A', '333': 'F', '33': 'E', '3': 'D', '444': 'I', '44': 'H', '4': 'G',
                   '555': 'L', '55': 'K', '5': 'J', '666': 'O', '66': 'N', '6': 'M', '7777': 'S', '777': 'R', '77': 'Q',
-                  '7': 'P', '888': 'V', '88': 'U', '8': 'T', '9999': 'Z', '999': 'W', '99': 'X', '9': 'Y', '0': ' '}
+                  '7': 'P', '888': 'V', '88': 'U', '8': 'T', '9999': 'Z', '999': 'Y', '99': 'X', '9': 'W', '0': ' '}
 
 tomtom_table = {"/": "A", "//": "B", "///": "C", "////": "D", "/\\": "E", "//\\": "F", "///\\": "G", "/\\\\": "H",
                 "/\\\\\\": "I", "\\/": "J", "\\\\/": "K", "\\\\\\/": "L", "\\//": "M", "\\///": "N", "/\\/": "O",
@@ -362,17 +366,14 @@ def base91_decode(text: str):
     return out.decode('UTF-8')
 
 
-def t9_decode(text: str):
-    t9_decoded = ''
-    if ' ' in text:
-        for i in text.split():
-            t9_decoded += t9_decode(i)
-            t9_decoded += ' '
-    else:
-        cutted_txt = cut(text, 2)
-        for i in cutted_txt:
-            t9_decoded += t9_table[i]
-    return t9_decoded
+def short_multitap_decode(text: str):
+    decoded = ""
+    words = text.replace(args.separator, "").replace("01", "0").split("0")
+    for word in words:
+        letters = cut(word, 2)
+        decoded += "".join(short_multitap_table[letter] for letter in letters)
+        decoded += " "
+    return decoded.strip()
 
 
 def morse_decode(text: str):
@@ -382,26 +383,6 @@ def morse_decode(text: str):
             decoded_morse += morse_table[char]
         decoded_morse += ' '
     return decoded_morse
-
-
-def multitap_decode(text: str, sep: str = " "):
-    multitap_decoded = ''
-    invalid_char = False
-    for char in text:
-        if char not in '023456789 ' + sep:
-            invalid_char = True
-            break
-    if not invalid_char:
-        if sep in text:
-            for word in text.split():
-                for char in word.split(sep):
-                    multitap_decoded += multitap_table[char]
-                multitap_decoded += ' '
-        else:
-            for i in multitap_table:
-                text = text.replace(i, multitap_table[i])
-            multitap_decoded = text
-    return multitap_decoded
 
 
 def caesar_decode(text: str, rot: int, ascii_mode: bool = False):
@@ -538,8 +519,8 @@ rot47 = Cipher("rot47", "ROT47", rot47_decode)
 rot8000 = Cipher("rot8000", "ROT8000", rot8000_decode)
 caesar = Cipher("caesar", f"Caesar +{args.rotation}", caesar_decode, [args.rotation, args.ascii])
 vigenere = Cipher("vigenere", f"Vigenère ({args.key})", vigenere_decode, [args.key])
-multitap = Cipher("multitap", "MultiTap", multitap_decode)
-t9 = Cipher("t9", "T9", t9_decode)
+multitap = Cipher("multitap", "MultiTap", substitution_cipher, [multitap_table, True])
+short_multitap = Cipher("multitapshort", "MultiTap (Short)", short_multitap_decode)
 tomtom = Cipher("tomtom", "Tom Tom", substitution_cipher, [tomtom_table, True])
 nato = Cipher("nato", "Nato", substitution_cipher, [nato_table, True])
 dvorak = Cipher("dvorak", "Dvorak", dvorak_decode)
@@ -547,8 +528,8 @@ altcode = Cipher("altcode", "Alt Code", substitution_cipher, [alt_code_table])
 brainfuck = Cipher("brainfuck", "Brainfuck", brainfuck_decode)
 ook = Cipher("ook!", "Ook!", ook_decode)
 ciphers = [caesar, atbash, binary, octal, decimal, hexadecimal, base32, base45, base58, base62, base64, base85, base91,
-           vigenere, a1z26, morse, goldbug, baconian, baconian26, rot13, tomtom, multitap, t9, nato, dvorak, altcode,
-           rot47, brainfuck, ook, rot8000]
+           vigenere, a1z26, morse, goldbug, baconian, baconian26, rot13, tomtom, multitap, short_multitap, nato, dvorak,
+           altcode, rot47, brainfuck, ook, rot8000]
 # Exclude these ciphers from automated tentative
 all_exclude = ['caesar', 'vigenere', 'dvorak', 'rot47', 'brainfuck', 'ook!']
 
@@ -562,7 +543,7 @@ def caesar_bruteforce():
     for rot in range(1, 26):
         caesar.decoder_params = [rot, args.ascii]
         caesar.formated_name = f"Rotation {rot}"
-        main()
+        main(args.cipher_text)
 
 
 def vigenere_wordlist():
@@ -572,54 +553,75 @@ def vigenere_wordlist():
     for key in keys:
         vigenere.decoder_params = [key]
         vigenere.formated_name = key
-        main()
+        main(args.cipher_text)
 
 
-def main():
-
-    file_out = ''
-    unknown_cipher = True
+def find_cipher(cipher_identifier: str):
     for cipher in ciphers:
-        if (not args.cipher and cipher.identifier not in all_exclude) or \
-                (args.cipher and args.cipher in cipher.identifier):
-            unknown_cipher = False
-            decoded = ''
-            out = ''
-            found = True
-            try:
-                decoded = cipher.decode(args.cipher_text)
+        if cipher_identifier in cipher.identifier:
+            return cipher
 
-            except (ValueError, IndexError, KeyError):
-                found = False
 
-            except Exception as e:
-                print(e)
+def is_printable(text: str):
+    ignore_chars = ['\n', '\t']
+    for char in ignore_chars:
+        text = text.replace(char, "")
+    return text.strip().isprintable()
 
-            decoded = decoded.replace("\n", "§§\\n§§").replace("\t", "§§\\t§§")
-            if decoded.strip() and (decoded.isprintable() or args.force):
-                decoded = decoded.replace("§§\\n§§", "\n").replace("§§\\t§§", "\t")
-                out = style(decoded, found, cipher, less=args.less, verbose=args.verbose)
 
-            if out:
-                if not args.quiet:
-                    print(out)
-                if args.output:
-                    file_out += out
+def decode_text(cipher_text: str, cipher: Cipher):
+    decoded = ''
+    found = True
+    try:
+        decoded = cipher.decode(cipher_text)
 
-            if args.cipher:
-                break
+    except (ValueError, IndexError, KeyError):
+        found = False
 
-    if unknown_cipher:
-        error_msg = "Unknown Cipher"
-        print(style(error_msg, False, args.cipher, verbose=True))
+    except Exception as e:
+        print(e)
 
-    if args.output:
-        with open(f"{args.output}", "w") as file:
-            file.write(remove_color(file_out))
+    if not is_printable(decoded) and not args.force:
+        found = False
+
+    return found, decoded, cipher
+
+
+def main(cipher_text: str):
+    decoders = []
+    file_out = ''
+    if args.cipher:
+        cipher_decoder = find_cipher(args.cipher)
+        if not cipher_decoder:
+            error_msg = "Unknown Cipher"
+            print(style(error_msg, False, args.cipher, verbose=True))
+        decoders.extend(cipher_decoder)
+    else:
+        decoders.extend([cipher for cipher in ciphers if cipher.identifier not in all_exclude])
+
+    for decoder in decoders:
+        out = ''
+        found, decoded, cipher = decode_text(cipher_text, decoder)
+
+        if found and args.recursive:
+            main(decoded)
+
+        if decoded and (found or args.verbose):
+            out = style(decoded, found, cipher, less=args.less, verbose=args.verbose)
+
+        if out:
+            if not args.quiet:
+                print(out)
+            if args.output:
+                file_out += out
+
+        if args.output:
+            with open(f"{args.output}", "w") as file:
+                file.write(remove_color(file_out))
 
 
 if __name__ == "__main__":
-    if not sys.stdin.isatty():
+    if not sys.stdin.isatty() and False:
         args.cipher_text = args.stdin.read()
 
     if args.file:
@@ -637,4 +639,4 @@ if __name__ == "__main__":
     elif args.cipher and args.cipher in vigenere.identifier and args.wordlist:
         vigenere_wordlist()
     else:
-        main()
+        main(args.cipher_text)
