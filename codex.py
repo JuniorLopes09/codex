@@ -623,7 +623,7 @@ def main(cipher_text: str):
 
 
 if __name__ == "__main__":
-    if not sys.stdin.isatty() and False:
+    if not sys.stdin.isatty():
         args.cipher_text = args.stdin.read()
 
     if args.file:
